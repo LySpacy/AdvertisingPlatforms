@@ -1,0 +1,2 @@
+# AdvertisingPlatforms
+Тестовое задание
