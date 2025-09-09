@@ -1,4 +1,6 @@
-﻿public class InMemoryAdPlatformRepository : IAdPlatformRepository
+﻿using AdvertisingPlatforms.Service.Common.Exceptions;
+
+public class InMemoryAdPlatformRepository : IAdPlatformRepository
 {
     
     /// <summary>
@@ -13,27 +15,40 @@
     public void LoadFromLines(IEnumerable<string> lines)
     {
         var newRoot = new LocationNode();
+        var invalidLines = new List<string>();
 
         foreach (var line in lines)
         {
             if (string.IsNullOrWhiteSpace(line) || !line.Contains(":"))
+            {
+                invalidLines.Add(line);
                 continue;
+            }
 
             var parts = line.Split(':', 2);
-            if (parts.Length != 2) continue;
-
             var platform = parts[0].Trim();
-            if (string.IsNullOrEmpty(platform)) continue;
+            if (string.IsNullOrEmpty(platform))
+            {
+                invalidLines.Add(line);
+                continue;
+            }
 
             var locations = parts[1].Split(',', StringSplitOptions.RemoveEmptyEntries);
             foreach (var loc in locations)
             {
                 var cleanLoc = loc.Trim();
-                if (!cleanLoc.StartsWith("/")) continue;
-
+                if (!cleanLoc.StartsWith("/"))
+                {
+                    invalidLines.Add(line);
+                    continue;
+                }
                 AddLocation(newRoot, cleanLoc, platform);
             }
         }
+
+        if (invalidLines.Any())
+            throw new InvalidAdPlatformFileException(
+                "Invalid file: Структура файла не позволяет сохранить данные");
 
         _root = newRoot;
     }
