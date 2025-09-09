@@ -1,7 +1,15 @@
 ﻿public class InMemoryAdPlatformRepository : IAdPlatformRepository
 {
+    
+    /// <summary>
+    /// Храним в памяти все ноды
+    /// </summary>
     private volatile LocationNode _root = new LocationNode();
 
+    /// <summary>
+    /// Обрабатывает строки данных рекламных платформ с их индексами локаций
+    /// </summary>
+    /// <param name="lines">строки с рекламными платформами с их индексами локаций</param>
     public void LoadFromLines(IEnumerable<string> lines)
     {
         var newRoot = new LocationNode();
@@ -30,6 +38,11 @@
         _root = newRoot;
     }
     
+    /// <summary>
+    /// Поиск рекламных платформа по локации
+    /// </summary>
+    /// <param name="location">Локация</param>
+    /// <returns>Список наименования платформ</returns>
     public List<string> FindPlatforms(string location)
     {
         if (string.IsNullOrWhiteSpace(location) || !location.StartsWith("/"))
@@ -54,6 +67,12 @@
         return result.Distinct().ToList();
     }
     
+    /// <summary>
+    /// Добавление платформы с локацией в ноду
+    /// </summary>
+    /// <param name="root">Нода</param>
+    /// <param name="location">Локация</param>
+    /// <param name="platform">Наименование платформы</param>
     private void AddLocation(LocationNode root, string location, string platform)
     {
         var segments = location.Split('/', StringSplitOptions.RemoveEmptyEntries);
