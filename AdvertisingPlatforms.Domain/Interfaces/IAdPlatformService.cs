@@ -1,5 +1,4 @@
-﻿using AdvertisingPlatforms.Domain.DTO;
-using Microsoft.AspNet.Http;
+﻿using Microsoft.AspNet.Http;
 
 namespace AdvertisingPlatforms.Domain.Interfaces;
 
@@ -17,5 +16,5 @@ public interface IAdPlatformService
     /// </summary>
     /// <param name="location">Индекс локации</param>
     /// <returns>Список газет</returns>
-    IEnumerable<AdPlatform> Search(string location);
+    List<string> Search(string location);
 }
