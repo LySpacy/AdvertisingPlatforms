@@ -83,10 +83,10 @@ public class InMemoryAdPlatformRepository : IAdPlatformRepository
     }
     
     /// <summary>
-    /// Добавление платформы с локацией в ноду
+    /// Добавление платформы с локацией в ноду, без дубликатов
     /// </summary>
-    /// <param name="root">Нода</param>
-    /// <param name="location">Локация</param>
+    /// <param name="root">Корневая нода</param>
+    /// <param name="location">Локация вида /ru/svrd</param>
     /// <param name="platform">Наименование платформы</param>
     private void AddLocation(LocationNode root, string location, string platform)
     {
@@ -103,6 +103,8 @@ public class InMemoryAdPlatformRepository : IAdPlatformRepository
             node = child;
         }
 
-        node.Platforms.Add(platform);
+        // Добавляем платформу только если её ещё нет в текущей ноде
+        if (!node.Platforms.Contains(platform))
+            node.Platforms.Add(platform);
     }
 }

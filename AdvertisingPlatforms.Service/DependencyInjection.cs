@@ -9,9 +9,8 @@ public static  class DependencyInjection
     {
         
         // Singleton - для постоянной жизни в процессе работы приложения, т.к. данные храняться в памяти
+        services.AddSingleton<IAdPlatformRepository, InMemoryAdPlatformRepository>();
         services.AddSingleton<IAdPlatformService, AdPlatformService>();
-        
-        services.AddScoped<IAdPlatformRepository, InMemoryAdPlatformRepository>();
         
         return services;
     }
